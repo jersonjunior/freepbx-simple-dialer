@@ -61,6 +61,24 @@ $sql = "CREATE TABLE IF NOT EXISTS simpledialer_call_logs (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 $db->query($sql);
 
+// Check and add 'cpf' column to simpledialer_contacts if it doesn't exist
+$sql = "SHOW COLUMNS FROM simpledialer_contacts LIKE 'cpf'";
+$result = $db->query($sql);
+if ($result->rowCount() == 0) {
+    $sql = "ALTER TABLE simpledialer_contacts ADD COLUMN cpf VARCHAR(20) NULL";
+    $db->query($sql);
+    out(_('Added cpf column to simpledialer_contacts table'));
+}
+
+// Check and add 'idade' column to simpledialer_contacts if it doesn't exist
+$sql = "SHOW COLUMNS FROM simpledialer_contacts LIKE 'idade'";
+$result = $db->query($sql);
+if ($result->rowCount() == 0) {
+    $sql = "ALTER TABLE simpledialer_contacts ADD COLUMN idade INT(3) NULL";
+    $db->query($sql);
+    out(_('Added idade column to simpledialer_contacts table'));
+}
+
 out(_('Database tables created successfully'));
 
 // Create sounds directory

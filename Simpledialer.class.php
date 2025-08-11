@@ -527,6 +527,7 @@ class Simpledialer extends FreePBX_Helpers implements BMO {
     private function createDialplanContexts() {
         $context = "[simpledialer-outbound]\n";
         $context .= "exten => s,1,NoOp(Simple Dialer - Playing: \${AUDIO_FILE})\n";
+        $context .= "exten => s,n,NoOp(Contact Name: \${NAME})\n";
         $context .= "exten => s,n,NoOp(Contact CPF: \${CPF})\n";
         $context .= "exten => s,n,Set(TIMEOUT(absolute)=300)\n";
         $context .= "exten => s,n,Set(AUDIO_PATH=en/\${AUDIO_FILE})\n";
