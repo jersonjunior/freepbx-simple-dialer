@@ -671,19 +671,13 @@ if (isset($_FILES['audio_file']) && $_FILES['audio_file']['error'] === UPLOAD_ER
                     <input type="hidden" name="campaign_id" id="campaignId">
                     
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label><?php echo _('Campaign Name'); ?> *</label>
                                 <input type="text" name="name" id="campaignName" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label><?php echo _('CPF'); ?></label>
-                                <input type="text" name="cpf" id="campaignCpf" class="form-control" placeholder="CPF">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label><?php echo _('Trunk'); ?> *</label>
                                 <select name="trunk" id="campaignTrunk" class="form-control" required>
@@ -986,7 +980,6 @@ function editCampaign(campaignId) {
         $('#campaignAction').val('edit_campaign');
         $('#campaignId').val(campaignId);
         $('#campaignName').val(data.name);
-        $('#campaignCpf').val(data.cpf);
         $('#campaignDescription').val(data.description);
         $('#campaignAudioFile').val(data.audio_file);
         $('#campaignTrunk').val(data.trunk);

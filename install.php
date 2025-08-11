@@ -8,7 +8,6 @@ global $amp_conf;
 $sql = "CREATE TABLE IF NOT EXISTS simpledialer_campaigns (
     id INT(11) NOT NULL AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    cpf VARCHAR(20),
     description TEXT,
     audio_file VARCHAR(255),
     trunk VARCHAR(100),
