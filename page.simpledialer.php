@@ -1070,12 +1070,6 @@ $('#campaignForm').on('submit', function(e) {
     e.preventDefault();
     
     var formData = new FormData(this);
-    var plainFormData = {};
-    for (var pair of formData.entries()) {
-        plainFormData[pair[0]] = pair[1];
-    }
-    alert(JSON.stringify(plainFormData));
-
     var scheduledTime = $('#campaignScheduledTime').val();
     var hasFile = $('#campaignCsvFile')[0].files.length > 0;
     
