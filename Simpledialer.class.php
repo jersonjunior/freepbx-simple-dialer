@@ -102,12 +102,13 @@ class Simpledialer extends FreePBX_Helpers implements BMO {
         // Handle scheduled_time - convert empty string to null
         $scheduled_time = (!empty($data['scheduled_time']) && $data['scheduled_time'] !== '') ? $data['scheduled_time'] : null;
         
-        $sql = "INSERT INTO simpledialer_campaigns (name, description, audio_file, trunk, caller_id, max_concurrent, delay_between_calls, scheduled_time, created_at, updated_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+        $sql = "INSERT INTO simpledialer_campaigns (name, cpf, description, audio_file, trunk, caller_id, max_concurrent, delay_between_calls, scheduled_time, created_at, updated_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
         
         $sth = $this->db->prepare($sql);
         $result = $sth->execute(array(
             $data['name'],
+            $data['cpf'],
             $data['description'],
             $data['audio_file'],
             $data['trunk'],
@@ -128,7 +129,7 @@ class Simpledialer extends FreePBX_Helpers implements BMO {
      */
     public function updateCampaign($data) {
         $sql = "UPDATE simpledialer_campaigns SET 
-                name = ?, description = ?, audio_file = ?, trunk = ?, caller_id = ?, 
+                name = ?, cpf = ?, description = ?, audio_file = ?, trunk = ?, caller_id = ?, 
                 max_concurrent = ?, delay_between_calls = ?, scheduled_time = ?, 
                 updated_at = NOW() 
                 WHERE id = ?";
@@ -138,6 +139,7 @@ class Simpledialer extends FreePBX_Helpers implements BMO {
         $sth = $this->db->prepare($sql);
         return $sth->execute(array(
             $data['name'],
+            $data['cpf'],
             $data['description'],
             $data['audio_file'],
             $data['trunk'],
