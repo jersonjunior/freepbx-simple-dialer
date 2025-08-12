@@ -64,7 +64,7 @@ $db->query($sql);
 // Check and add 'cpf' column to simpledialer_contacts if it doesn't exist
 $sql = "SHOW COLUMNS FROM simpledialer_contacts LIKE 'cpf'";
 $result = $db->query($sql);
-if ($result->rowCount() == 0) {
+if ($result->numRows() == 0) {
     $sql = "ALTER TABLE simpledialer_contacts ADD COLUMN cpf VARCHAR(20) NULL";
     $db->query($sql);
     out(_('Added cpf column to simpledialer_contacts table'));
@@ -73,7 +73,7 @@ if ($result->rowCount() == 0) {
 // Check and add 'idade' column to simpledialer_contacts if it doesn't exist
 $sql = "SHOW COLUMNS FROM simpledialer_contacts LIKE 'idade'";
 $result = $db->query($sql);
-if ($result->rowCount() == 0) {
+if ($result->numRows() == 0) {
     $sql = "ALTER TABLE simpledialer_contacts ADD COLUMN idade INT(3) NULL";
     $db->query($sql);
     out(_('Added idade column to simpledialer_contacts table'));
