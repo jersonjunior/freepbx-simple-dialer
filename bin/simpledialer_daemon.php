@@ -204,6 +204,7 @@ class SimpleDialerDaemon {
             'AUDIO_FILE' => $this->campaign['audio_file'],
             'CAMPAIGN_ID' => $this->campaign_id,
             'CONTACT_ID' => $contact['id'],
+            'NAME' => $contact['name'],
             'CPF' => $contact['cpf'],
             'IDADE' => $contact['idade']
         );
@@ -216,7 +217,7 @@ class SimpleDialerDaemon {
             'Priority' => '1',
             'Timeout' => '30000',
             'CallerID' => $this->campaign['caller_id'],
-            'Variable' => 'CALL_ID=' . $call_id . ',AUDIO_FILE=' . $this->campaign['audio_file'] . ',CAMPAIGN_ID=' . $this->campaign_id . ',CONTACT_ID=' . $contact['id'] . ',CPF=' . $contact['cpf'] . ',IDADE=' . $contact['idade'] . ',__EXTEN_OVERRIDE_CALLERID=' . $this->campaign['caller_id'],
+            'Variable' => 'CALL_ID=' . $call_id . ',AUDIO_FILE=' . $this->campaign['audio_file'] . ',CAMPAIGN_ID=' . $this->campaign_id . ',CONTACT_ID=' . $contact['id'] . ',NAME=' . $contact['name'] . ',CPF=' . $contact['cpf'] . ',IDADE=' . $contact['idade'] . ',__EXTEN_OVERRIDE_CALLERID=' . $this->campaign['caller_id'],
             'Async' => 'true'
         );
         
