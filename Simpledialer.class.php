@@ -11,13 +11,11 @@ class Simpledialer extends FreePBX_Helpers implements BMO {
     }
 
     public function install() {
-        // Create default dialplan contexts
-        $this->createDialplanContexts();
+
     }
 
     public function uninstall() {
-        // Clean up dialplan contexts
-        $this->removeDialplanContexts();
+
     }
 
     public function backup() {
@@ -521,76 +519,5 @@ class Simpledialer extends FreePBX_Helpers implements BMO {
     }
 
 
-    /**
-     * Create dialplan contexts
-     */
-    private function createDialplanContexts() {
-        $context = "[simpledialer-outbound]\n";
-        $context .= "exten => s,1,NoOp(Simple Dialer - Playing: \${AUDIO_FILE})\n";
-        $context .= "exten => s,n,NoOp(Contact Name: \${NAME})\n";
-        $context .= "exten => s,n,NoOp(Contact CPF: \${CPF})\n";
-        $context .= "exten => s,n,Set(TIMEOUT(absolute)=300)\n";
-        $context .= "exten => s,n,Set(AUDIO_PATH=en/\${AUDIO_FILE})\n";
-        $context .= "exten => s,n,AMD()\n";
-        $context .= "exten => s,n,GotoIf(\$[\"\${AMDSTATUS}\" = \"MACHINE\"]?vm:human)\n";
-        $context .= "exten => s,n(human),Playback(\${AUDIO_PATH})\n";
-        $context .= "exten => s,n,Wait(2)\n";
-        $context .= "exten => s,n,Hangup()\n";
-        $context .= "exten => s,n(vm),Wait(3)\n";
-        $context .= "exten => s,n,Playback(\${AUDIO_PATH})\n";
-        $context .= "exten => s,n,Wait(1)\n";
-        $context .= "exten => s,n,Hangup()\n\n";
-
-        // Write to extensions_custom.conf
-        $this->writeCustomDialplan($context);
-    }
-
-    /**
-     * Remove dialplan contexts
-     */
-    private function removeDialplanContexts() {
-        // Remove from extensions_custom.conf
-        $this->removeCustomDialplan();
-    }
-
-    /**
-     * Write custom dialplan
-     */
-    private function writeCustomDialplan($context) {
-        $custom_file = '/etc/asterisk/extensions_custom.conf';
-        
-        // Check if file exists, if not create it
-        if (!file_exists($custom_file)) {
-            touch($custom_file);
-        }
-        
-        $content = file_get_contents($custom_file);
-        
-        // Remove existing simpledialer context
-        $content = preg_replace('/\[simpledialer-outbound\].*?(?=\[|\Z)/s', '', $content);
-        
-        // Clean up any extra whitespace
-        $content = trim($content);
-        
-        // Add new context
-        $content .= "\n\n" . $context;
-        
-        file_put_contents($custom_file, $content);
-        
-        // Reload dialplan
-        exec('asterisk -rx "dialplan reload"');
-    }
-
-    /**
-     * Remove custom dialplan
-     */
-    private function removeCustomDialplan() {
-        $custom_file = '/etc/asterisk/extensions_custom.conf';
-        $content = file_get_contents($custom_file);
-        
-        // Remove simpledialer context
-        $content = preg_replace('/\[simpledialer-outbound\].*?(?=\[|\Z)/s', '', $content);
-        
-        file_put_contents($custom_file, $content);
-    }
+    
 }

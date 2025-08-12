@@ -58,12 +58,18 @@ if ($action == 'get_contacts' && !empty($campaign_id)) {
 
 // Handle sample CSV download
 if ($action == 'download_sample_csv') {
-    $csv_content = "phone_number,name\n";
-    $csv_content .= "15551234567,John Doe\n";
-    $csv_content .= "15559876543,Jane Smith\n";
-    $csv_content .= "15555551234,Bob Johnson\n";
-    $csv_content .= "15552223333,Alice Williams\n";
-    $csv_content .= "15554445555,Charlie Brown\n";
+    $csv_content = "phone_number,name,cpf,idade
+";
+    $csv_content .= "15551234567,John Doe,12345678900,30
+";
+    $csv_content .= "15559876543,Jane Smith,98765432111,25
+";
+    $csv_content .= "15555551234,Bob Johnson,11122233344,45
+";
+    $csv_content .= "15552223333,Alice Williams,55566677788,22
+";
+    $csv_content .= "15554445555,Charlie Brown,99988877766,60
+";
     
     header('Content-Type: text/csv');
     header('Content-Disposition: attachment; filename="sample_contacts.csv"');
@@ -754,8 +760,8 @@ if (isset($_FILES['audio_file']) && $_FILES['audio_file']['error'] === UPLOAD_ER
                                 <label><?php echo _('CSV File (optional)'); ?></label>
                                 <input type="file" name="csv_file" id="campaignCsvFile" class="form-control" accept=".csv">
                                 <small class="form-text text-muted">
-                                    <?php echo _('CSV format: phone_number,name (header row optional)'); ?><br>
-                                    <?php echo _('Example: 15551234567,John Doe'); ?><br>
+                                    <?php echo _('CSV format: phone_number,name,cpf,idade (header row optional)'); ?><br>
+                                    <?php echo _('Example: 15551234567,John Doe,12345678900,30'); ?><br>
                                     <?php echo _('You can upload contacts now or add them later'); ?>
                                 </small>
                             </div>
@@ -763,7 +769,7 @@ if (isset($_FILES['audio_file']) && $_FILES['audio_file']['error'] === UPLOAD_ER
                         <div class="col-md-4">
                             <div class="alert alert-info" style="margin-top: 25px;">
                                 <strong><?php echo _('Sample Format:'); ?></strong><br>
-                                <code style="font-size: 11px;">phone_number,name<br>15551234567,John Doe</code>
+                                <code style="font-size: 11px;">phone_number,name,cpf,idade<br>15551234567,John Doe,12345678900,30</code>
                                 <br><br>
                                 <a href="?display=simpledialer&action=download_sample_csv" class="btn btn-xs btn-info" target="_blank">
                                     <i class="fa fa-download"></i> <?php echo _('Sample CSV'); ?>
@@ -805,8 +811,8 @@ if (isset($_FILES['audio_file']) && $_FILES['audio_file']['error'] === UPLOAD_ER
                                         <label><?php echo _('CSV File'); ?></label>
                                         <input type="file" name="csv_file" class="form-control" accept=".csv" required>
                                         <small class="form-text text-muted">
-                                            <?php echo _('CSV format: phone_number,name (header row optional)'); ?><br>
-                                            <?php echo _('Example: 15551234567,John Doe'); ?>
+                                            <?php echo _('CSV format: phone_number,name,cpf,idade (header row optional)'); ?><br>
+                                            <?php echo _('Example: 15551234567,John Doe,12345678900,30'); ?>
                                         </small>
                                     </div>
                                     
@@ -819,7 +825,7 @@ if (isset($_FILES['audio_file']) && $_FILES['audio_file']['error'] === UPLOAD_ER
                                 
                                 <div class="alert alert-info">
                                     <strong><?php echo _('Sample CSV Format:'); ?></strong><br>
-                                    <code>phone_number,name<br>15551234567,John Doe<br>15559876543,Jane Smith</code>
+                                    <code>phone_number,name,cpf,idade<br>15551234567,John Doe,12345678900,30<br>15559876543,Jane Smith,98765432111,25</code>
                                     <br><br>
                                     <a href="?display=simpledialer&action=download_sample_csv" class="btn btn-xs btn-info">
                                         <i class="fa fa-download"></i> <?php echo _('Download Sample CSV'); ?>
