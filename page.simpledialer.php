@@ -482,13 +482,13 @@ if (isset($_FILES['audio_file']) && $_FILES['audio_file']['error'] === UPLOAD_ER
                                 <?php foreach ($campaigns as $campaign): ?>
                                     <?php $stats = $simpledialer->getCampaignStats($campaign['id']); ?>
                                     <tr>
-                                        <td><?php echo htmlspecialchars($campaign['name']); ?></td>
-                                        <td><?php echo htmlspecialchars($campaign['description']); ?></td>
-                                        <td>
-                                            <span class="label label-<?php echo $campaign['status'] == 'active' ? 'success' : ($campaign['status'] == 'stopped' ? 'danger' : 'default'); ?>">
-                                                <?php echo ucfirst($campaign['status']); ?>
-                                            </span>
-                                        </td>
+                                    <td><?php echo isset($campaign['name']) ? htmlspecialchars($campaign['name']) : ''; ?></td>
+                                    <td><?php echo isset($campaign['description']) ? htmlspecialchars($campaign['description']) : ''; ?></td>
+                                    <td>
+                                        <span class="label label-<?php echo isset($campaign['status']) ? ($campaign['status'] == 'active' ? 'success' : ($campaign['status'] == 'stopped' ? 'danger' : 'default')) : 'default'; ?>">
+                                            <?php echo isset($campaign['status']) ? ucfirst($campaign['status']) : ''; ?>
+                                        </span>
+                                    </td>
                                         <td><?php echo $stats['total_contacts']; ?></td>
                                         <td>
                                             <?php if ($stats['total_contacts'] > 0): ?>
@@ -590,37 +590,55 @@ if (isset($_FILES['audio_file']) && $_FILES['audio_file']['error'] === UPLOAD_ER
                         <br><small><?php echo _('You can also manage recordings in Admin > System Recordings'); ?></small>
                     </div>
                     <div class="list-group" style="max-height: 400px; overflow-y: auto;">
-                        <?php foreach ($audio_files as $file): ?>
-                            <div class="list-group-item">
-                                <div class="list-group-item-heading">
-                                    <i class="fa fa-volume-up"></i> <strong><?php echo htmlspecialchars($file['name']); ?></strong>
-                                    <?php if (count($file['formats']) < 5): ?>
-                                        <button type="button" class="btn btn-xs btn-warning pull-right" onclick="regenerateFormats(<?php echo $file['id']; ?>)" title="Regenerate Missing Audio Formats">
-                                            <i class="fa fa-refresh"></i> Fix Formats
-                                        </button>
-                                    <?php else: ?>
-                                        <span class="label label-success pull-right">All Formats OK</span>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="list-group-item-text">
-                                    <small class="text-muted">ID: <?php echo $file['id']; ?> | File: <?php echo htmlspecialchars($file['filename']); ?></small><br>
-                                    <small>
-                                        <strong>Available formats:</strong> 
-                                        <?php if (!empty($file['formats'])): ?>
-                                            <span class="text-success"><?php echo strtoupper(implode(', ', $file['formats'])); ?></span>
+                        <?php if (!empty($audio_files['recordings'])): ?>
+                            <div class="list-group-item active"><strong><?php echo _('System Recordings'); ?></strong></div>
+                            <?php foreach ($audio_files['recordings'] as $file): ?>
+                                <div class="list-group-item">
+                                    <div class="list-group-item-heading">
+                                        <i class="fa fa-volume-up"></i> <strong><?php echo htmlspecialchars(isset($file['name']) ? $file['name'] : ''); ?></strong>
+                                        <?php if (isset($file['formats']) && count($file['formats']) < 5): ?>
+                                            <button type="button" class="btn btn-xs btn-warning pull-right" onclick="regenerateFormats(<?php echo $file['id']; ?>)" title="Regenerate Missing Audio Formats">
+                                                <i class="fa fa-refresh"></i> Fix Formats
+                                            </button>
                                         <?php else: ?>
-                                            <span class="text-danger">None found!</span>
+                                            <span class="label label-success pull-right">All Formats OK</span>
                                         <?php endif; ?>
-                                        <?php if (count($file['formats']) < 5): ?>
-                                            <span class="text-warning"> (<?php echo (5 - count($file['formats'])); ?> missing)</span>
-                                        <?php endif; ?>
-                                    </small>
+                                    </div>
+                                    <div class="list-group-item-text">
+                                        <small class="text-muted">ID: <?php echo $file['id']; ?> | File: <?php echo htmlspecialchars($file['filename']); ?></small><br>
+                                        <small>
+                                            <strong>Available formats:</strong> 
+                                            <?php if (isset($file['formats']) && !empty($file['formats'])): ?>
+                                                <span class="text-success"><?php echo strtoupper(implode(', ', $file['formats'])); ?></span>
+                                            <?php else: ?>
+                                                <span class="text-danger">None found!</span>
+                                            <?php endif; ?>
+                                            <?php if (isset($file['formats']) && count($file['formats']) < 5): ?>
+                                                <span class="text-warning"> (<?php echo (5 - count($file['formats'])); ?> missing)</span>
+                                            <?php endif; ?>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                        <?php endforeach; ?>
-                        <?php if (empty($audio_files)): ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
+                        <?php if (!empty($audio_files['announcements'])): ?>
+                            <div class="list-group-item active"><strong><?php echo _('Announcements'); ?></strong></div>
+                            <?php foreach ($audio_files['announcements'] as $file): ?>
+                                <div class="list-group-item">
+                                    <div class="list-group-item-heading">
+                                        <i class="fa fa-bullhorn"></i> <strong><?php echo htmlspecialchars($file['name']); ?></strong>
+                                    </div>
+                                    <div class="list-group-item-text">
+                                        <small class="text-muted">ID: <?php echo $file['id']; ?> | Context: <?php echo htmlspecialchars($file['filename']); ?></small>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
+                        <?php if (empty($audio_files['recordings']) && empty($audio_files['announcements'])): ?>
                             <div class="list-group-item">
-                                <span class="text-muted"><?php echo _('No system recordings found. Upload one above or create them in Admin > System Recordings.'); ?></span>
+                                <span class="text-muted"><?php echo _('No audio files found. Upload system recordings or create announcements.'); ?></span>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -706,10 +724,17 @@ if (isset($_FILES['audio_file']) && $_FILES['audio_file']['error'] === UPLOAD_ER
                             <div class="form-group">
                                 <label><?php echo _('Audio File'); ?> *</label>
                                 <select name="audio_file" id="campaignAudioFile" class="form-control" required>
-                                    <option value=""><?php echo _('Select System Recording'); ?></option>
-                                    <?php foreach ($audio_files as $file): ?>
-                                        <option value="<?php echo htmlspecialchars($file['filename']); ?>"><?php echo htmlspecialchars($file['name']); ?></option>
-                                    <?php endforeach; ?>
+                                    <option value=""><?php echo _('Select Audio'); ?></option>
+                                    <optgroup label="<?php echo _('System Recordings'); ?>">
+                                        <?php foreach ($audio_files['recordings'] as $file): ?>
+                                            <option value="<?php echo htmlspecialchars($file['filename']); ?>"><?php echo htmlspecialchars($file['name']); ?></option>
+                                        <?php endforeach; ?>
+                                    </optgroup>
+                                    <optgroup label="<?php echo _('Announcements'); ?>">
+                                        <?php foreach ($audio_files['announcements'] as $file): ?>
+                                            <option value="<?php echo htmlspecialchars($file['filename']); ?>"><?php echo htmlspecialchars($file['name']); ?></option>
+                                        <?php endforeach; ?>
+                                    </optgroup>
                                 </select>
                                 <small class="form-text text-muted"><?php echo _('Choose from FreePBX System Recordings'); ?></small>
                             </div>

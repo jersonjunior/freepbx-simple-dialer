@@ -479,7 +479,10 @@ class Simpledialer extends FreePBX_Helpers implements BMO {
      * Get audio files from FreePBX system recordings
      */
     public function getAudioFiles() {
-        $files = array();
+        $files = array(
+            'recordings' => array(),
+            'announcements' => array()
+        );
         
         // Get system recordings from FreePBX
         $sql = "SELECT id, displayname, filename FROM recordings ORDER BY displayname";
@@ -488,11 +491,25 @@ class Simpledialer extends FreePBX_Helpers implements BMO {
         $recordings = $sth->fetchAll(\PDO::FETCH_ASSOC);
         
         foreach ($recordings as $recording) {
-            $files[] = array(
+            $files['recordings'][] = array(
                 'id' => $recording['id'],
                 'name' => $recording['displayname'],
                 'filename' => $recording['filename'],
                 'formats' => $this->checkAudioFormats($recording['filename'])
+            );
+        }
+
+        // Get announcements from FreePBX
+        $sql = "SELECT announcement_id, description FROM announcement ORDER BY description";
+        $sth = $this->db->prepare($sql);
+        $sth->execute();
+        $announcements = $sth->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($announcements as $announcement) {
+            $files['announcements'][] = array(
+                'id' => $announcement['announcement_id'],
+                'name' => $announcement['description'],
+                'filename' => 'app-announcement-' . $announcement['announcement_id']
             );
         }
         
